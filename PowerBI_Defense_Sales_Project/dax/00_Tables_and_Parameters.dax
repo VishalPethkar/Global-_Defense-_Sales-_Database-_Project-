@@ -1,0 +1,72 @@
+-- ============================================================
+-- 00 | CALCULATED TABLES & WHAT-IF PARAMETERS
+-- Modeling > New table, paste each block separately.
+-- ============================================================
+
+-- ---- Dim_Date (fiscal year starts 1 October, matching the data window Oct-2023 to Sep-2026)
+Dim_Date =
+ADDCOLUMNS(
+    CALENDAR(DATE(2023, 10, 1), DATE(2026, 9, 30)),
+    "Year",            YEAR([Date]),
+    "Month_No",        MONTH([Date]),
+    "Month",           FORMAT([Date], "MMM"),
+    "Year_Month",      FORMAT([Date], "yyyy-MM"),
+    "Quarter",         "Q" & QUARTER([Date]),
+    "Fiscal_Year",     "FY" & (YEAR([Date]) + IF(MONTH([Date]) >= 10, 1, 0)),
+    "Fiscal_Month_No", MOD(MONTH([Date]) - 10, 12) + 1,
+    "Fiscal_Quarter",  "FQ" & (INT(MOD(MONTH([Date]) - 10, 12) / 3) + 1),
+    "Weekday",         FORMAT([Date], "ddd"),
+    "Weekday_No",      WEEKDAY([Date], 2),
+    "Is_Weekend",      IF(WEEKDAY([Date], 2) >= 6, 1, 0)
+)
+-- After creating: Table tools > Mark as date table (Date).
+-- Sort by column:  Month -> Month_No | Weekday -> Weekday_No | Fiscal_Quarter is already sortable as text.
+-- NOTE: shipments dated after 30-Sep-2026 (max 7-Oct-2026) fall outside this calendar. That only
+--       affects the inactive Ship_Date relationship; order-date analysis is complete.
+
+-- ---- Dim_OrderStatus (gives the status axis a sensible sort + grouping)
+Dim_OrderStatus =
+DATATABLE(
+    "Order_Status", STRING, "Status_Sort", INTEGER, "Status_Group", STRING,
+    {
+        {"Completed", 1, "Realised"},
+        {"Pending",   2, "Pipeline"},
+        {"Returned",  3, "Leakage"},
+        {"Cancelled", 4, "Leakage"}
+    }
+)
+-- Sort Order_Status by Status_Sort.
+
+-- ---- Dim_DiscountBand (fixes the alphabetical-sort problem for text bands)
+Dim_DiscountBand =
+DATATABLE(
+    "Discount_Band", STRING, "Band_Sort", INTEGER,
+    { {"0%", 1}, {"1-5%", 2}, {"6-10%", 3}, {"11-15%", 4}, {"16-20%", 5} }
+)
+-- Sort Discount_Band by Band_Sort.
+
+-- ---- What-if parameter 1: discount cap (0% to 20%).
+-- Built with integers then divided by 100, so 0.07 is exactly the same double as the data.
+Discount Cap =
+SELECTCOLUMNS(GENERATESERIES(0, 20, 1), "Discount Cap", [Value] / 100)
+
+Discount Cap Value =
+SELECTEDVALUE('Discount Cap'[Discount Cap], 0.20)       -- default 20% = "no cap" = actual profit
+-- Put the 'Discount Cap' column in a slicer (style: slider / between->single).
+
+-- ---- What-if parameter 2: customer attrition on orders that used to get a bigger discount
+Attrition =
+SELECTCOLUMNS(GENERATESERIES(0, 50, 5), "Attrition", [Value] / 100)
+
+Attrition Value =
+SELECTEDVALUE(Attrition[Attrition], 0)
+
+-- ---- Field parameter: lets the viewer switch the KPI shown in a chart (Modeling > New parameter > Fields)
+Metric Selector =
+{
+    ("Revenue",    NAMEOF('_Measures'[Revenue]),          0),
+    ("Profit",     NAMEOF('_Measures'[Profit]),           1),
+    ("Margin %",   NAMEOF('_Measures'[Profit Margin %]),  2),
+    ("Orders",     NAMEOF('_Measures'[Completed Orders]), 3)
+}
+-- Create this one through the UI (it adds hidden helper columns); the block above is what it generates.

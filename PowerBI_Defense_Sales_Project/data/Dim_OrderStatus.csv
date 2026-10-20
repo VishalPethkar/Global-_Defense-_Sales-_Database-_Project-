@@ -1,0 +1,5 @@
+Order_Status,Status_Sort,Status_Group,Counts_As_Realised
+Completed,1,Realised,1
+Pending,2,Pipeline,0
+Returned,3,Leakage,0
+Cancelled,4,Leakage,0

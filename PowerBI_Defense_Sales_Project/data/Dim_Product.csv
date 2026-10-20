@@ -1,0 +1,52 @@
+Product_ID,Product_Name,Product_Category,Supplier_Name,Supplier_Country,Supplier_Short,Product_Group
+SKU-AM-001,Spetsnaz Helmet (Level 3),Armor,Safariland (USA),USA,Safariland,Non-Ammunition
+SKU-AM-002,Military Vest (Level 3),Armor,Tata Advanced Systems (India),India,Tata Advanced Systems,Non-Ammunition
+SKU-AM-003,Police Vest (Level 2),Armor,Point Blank Enterprises (USA),USA,Point Blank Enterprises,Non-Ammunition
+SKU-AM-004,Helmet (Level 2),Armor,Safariland (USA),USA,Safariland,Non-Ammunition
+SKU-AM-005,Police Vest (Level 1),Armor,Safariland (USA),USA,Safariland,Non-Ammunition
+SKU-AM-006,Motorcycle Helmet (Level 1),Armor,Point Blank Enterprises (USA),USA,Point Blank Enterprises,Non-Ammunition
+SKU-AR-001,AKM,Assault Rifle,Heckler & Koch (Germany),Germany,Heckler & Koch,Non-Ammunition
+SKU-AR-002,M416,Assault Rifle,Beretta Holding (Italy),Italy,Beretta Holding,Non-Ammunition
+SKU-AR-003,SCAR-L,Assault Rifle,Advanced Weapons and Equipment India Ltd. (AWEIL India),India,Advanced Weapons and Equipment India Ltd.,Non-Ammunition
+SKU-AR-004,Groza,Assault Rifle,Colt Defense (USA),USA,Colt Defense,Non-Ammunition
+SKU-AR-005,AUG A3,Assault Rifle,FN Herstal (Belgium),Belgium,FN Herstal,Non-Ammunition
+SKU-AR-006,Beryl M762,Assault Rifle,Heckler & Koch (Germany),Germany,Heckler & Koch,Non-Ammunition
+SKU-AR-007,M16A4,Assault Rifle,Colt Defense (USA),USA,Colt Defense,Non-Ammunition
+SKU-AR-008,QBZ,Assault Rifle,Colt Defense (USA),USA,Colt Defense,Non-Ammunition
+SKU-AR-009,ACE32,Assault Rifle,Colt Defense (USA),USA,Colt Defense,Non-Ammunition
+SKU-AR-010,Mk47 Mutant,Assault Rifle,FN Herstal (Belgium),Belgium,FN Herstal,Non-Ammunition
+SKU-AX-001,5.56mm Ammo,Ammunition,Advanced Weapons and Equipment India Ltd. (AWEIL India),India,Advanced Weapons and Equipment India Ltd.,Ammunition
+SKU-AX-002,7.62mm Ammo,Ammunition,Companhia Brasileira de Cartuchos (Brazil),Brazil,Companhia Brasileira de Cartuchos,Ammunition
+SKU-AX-003,9mm Ammo,Ammunition,Companhia Brasileira de Cartuchos (Brazil),Brazil,Companhia Brasileira de Cartuchos,Ammunition
+SKU-AX-004,.45 ACP Ammo,Ammunition,Companhia Brasileira de Cartuchos (Brazil),Brazil,Companhia Brasileira de Cartuchos,Ammunition
+SKU-AX-005,12 Gauge Ammo,Ammunition,Naraindas Deepchand and Sons (India),India,Naraindas Deepchand and Sons,Ammunition
+SKU-AX-006,.300 Magnum Ammo,Ammunition,Naraindas Deepchand and Sons (India),India,Naraindas Deepchand and Sons,Ammunition
+SKU-HG-001,R1895 Revolver,Handgun,Beretta Holding (Italy),Italy,Beretta Holding,Non-Ammunition
+SKU-HG-002,R45 Revolver,Handgun,Beretta Holding (Italy),Italy,Beretta Holding,Non-Ammunition
+SKU-HG-003,Desert Eagle,Handgun,Glock Ges.m.b.H. (Austria),Austria,Glock Ges.m.b.H.,Non-Ammunition
+SKU-HG-004,P92,Handgun,Beretta Holding (Italy),Italy,Beretta Holding,Non-Ammunition
+SKU-HG-005,P1911,Handgun,Beretta Holding (Italy),Italy,Beretta Holding,Non-Ammunition
+SKU-HG-006,Skorpion,Handgun,Heckler & Koch (Germany),Germany,Heckler & Koch,Non-Ammunition
+SKU-SG-001,S686,Shotgun,Benelli (Italy),Italy,Benelli,Non-Ammunition
+SKU-SG-002,S1897,Shotgun,Beretta Holding (Italy),Italy,Beretta Holding,Non-Ammunition
+SKU-SG-003,S12K,Shotgun,Benelli (Italy),Italy,Benelli,Non-Ammunition
+SKU-SG-004,DBS,Shotgun,Khadki Arms and Ammunition Dealer (India),India,Khadki Arms and Ammunition Dealer,Non-Ammunition
+SKU-SM-001,Micro UZI,SMG,Beretta Holding (Italy),Italy,Beretta Holding,Non-Ammunition
+SKU-SM-002,UMP45,SMG,Naraindas Deepchand and Sons (India),India,Naraindas Deepchand and Sons,Non-Ammunition
+SKU-SM-003,Vector,SMG,Beretta Holding (Italy),Italy,Beretta Holding,Non-Ammunition
+SKU-SM-004,Thompson SMG,SMG,Naraindas Deepchand and Sons (India),India,Naraindas Deepchand and Sons,Non-Ammunition
+SKU-SM-005,PP-19 Bizon,SMG,Naraindas Deepchand and Sons (India),India,Naraindas Deepchand and Sons,Non-Ammunition
+SKU-SR-001,Kar98k,Sniper Rifle,Accuracy International (UK),UK,Accuracy International,Non-Ammunition
+SKU-SR-002,M24,Sniper Rifle,Heckler & Koch (Germany),Germany,Heckler & Koch,Non-Ammunition
+SKU-SR-003,AWM,Sniper Rifle,Sig Sauer (USA),USA,Sig Sauer,Non-Ammunition
+SKU-SR-004,Mosin-Nagant,Sniper Rifle,Heckler & Koch (Germany),Germany,Heckler & Koch,Non-Ammunition
+SKU-SR-005,Win94,Sniper Rifle,Sig Sauer (USA),USA,Sig Sauer,Non-Ammunition
+SKU-SR-006,SKS,Sniper Rifle,Advanced Weapons and Equipment India Ltd. (AWEIL India),India,Advanced Weapons and Equipment India Ltd.,Non-Ammunition
+SKU-SR-007,Mini 14,Sniper Rifle,Sig Sauer (USA),USA,Sig Sauer,Non-Ammunition
+SKU-SR-008,Mk14,Sniper Rifle,Accuracy International (UK),UK,Accuracy International,Non-Ammunition
+SKU-SR-009,SLR,Sniper Rifle,Accuracy International (UK),UK,Accuracy International,Non-Ammunition
+SKU-SR-010,VSS,Sniper Rifle,Advanced Weapons and Equipment India Ltd. (AWEIL India),India,Advanced Weapons and Equipment India Ltd.,Non-Ammunition
+SKU-TH-001,Frag Grenade,Throwable,Naraindas Deepchand and Sons (India),India,Naraindas Deepchand and Sons,Non-Ammunition
+SKU-TH-002,Smoke Grenade,Throwable,Rheinmetall (Germany),Germany,Rheinmetall,Non-Ammunition
+SKU-TH-003,Molotov Cocktail,Throwable,Rheinmetall (Germany),Germany,Rheinmetall,Non-Ammunition
+SKU-TH-004,Stun Grenade,Throwable,Rheinmetall (Germany),Germany,Rheinmetall,Non-Ammunition

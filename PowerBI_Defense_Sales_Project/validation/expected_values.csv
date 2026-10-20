@@ -1,0 +1,95 @@
+Measure,Filter_Context,Expected_Value
+Orders (All),All,500000.0
+Completed Orders,All,400000.0
+Active Customers,All,91419.0
+Units Sold,All,3726619390.0
+Revenue,All,173439422655.0
+Cost,All,145375434810.0
+Profit,All,28063987837.0
+Profit Margin %,All,0.1618
+Avg Order Value,All,433599.0
+Weighted Discount %,All,0.0999
+Loss-Making Orders,All,20979.0
+Loss-Making %,All,0.0524
+Loss Value,All,-214568024.0
+Order Value (All Statuses),All,217097851567.0
+Returned Revenue,All,21787067657.0
+Cancelled Revenue,All,11033144817.0
+Pending Revenue,All,10838216439.0
+Revenue Leakage %,All,0.1512
+Return Rate %,All,0.1
+Cancel Rate %,All,0.05
+Pending Profit (Expected),All,1748365290.0
+Est. Profit Forgone to Leakage,All,5310592192.0
+Avg Ship Days,All,3.999
+Shipped Within 3 Days %,All,0.4288
+Revenue,FY2024,58021890368.0
+Profit,FY2024,9395594324.0
+Revenue,FY2025,57328059153.0
+Profit,FY2025,9295505667.0
+Revenue,FY2026,58089473134.0
+Profit,FY2026,9372887846.0
+Revenue YoY %,FY2025,-0.012
+Revenue YoY %,FY2026,0.0133
+Profit Margin %,Band 0%,0.2472
+Profit Margin %,Band 1-5%,0.2223
+Profit Margin %,Band 11-15%,0.1327
+Profit Margin %,Band 16-20%,0.0802
+Profit Margin %,Band 6-10%,0.1791
+Loss-Making Orders,Band 0%,0.0
+Loss-Making Orders,Band 1-5%,0.0
+Loss-Making Orders,Band 11-15%,2036.0
+Loss-Making Orders,Band 16-20%,18943.0
+Loss-Making Orders,Band 6-10%,0.0
+Revenue,Category Ammunition,133506391799.0
+Revenue,Category Armor,17758315719.0
+Revenue,Category Assault Rifle,8177196128.0
+Revenue,Category Handgun,1795553352.0
+Revenue,Category SMG,2693995309.0
+Revenue,Category Shotgun,1907594719.0
+Revenue,Category Sniper Rifle,7272856633.0
+Revenue,Category Throwable,327518996.0
+Revenue,Supplier Advanced Weapons and Equipment India Ltd.,13569857884.0
+Revenue,Supplier Companhia Brasileira de Cartuchos,63178011791.0
+Revenue,Supplier Naraindas Deepchand and Sons,60448898529.0
+Supplier HHI,All,2656.0
+Revenue,Region APAC,74150462019.0
+Revenue,Region EMEA,39456604720.0
+Revenue,Region LATAM,18833122578.0
+Revenue,Region North America,40999233337.0
+Revenue,Country Brazil,18833122578.0
+Revenue,Country Germany,20457740098.0
+Revenue,Country India,39142205961.0
+Revenue,Country Japan,17283570666.0
+Revenue,Country South Korea,17724685392.0
+Revenue,Country UK,18998864622.0
+Revenue,Country USA,40999233337.0
+Revenue,Segment Law Enforcement/Defense,75727727287.0
+Revenue,Segment Military/Army,65131836002.0
+Revenue,Segment Personal Use,5551917905.0
+Revenue,Segment Private Security,27027941461.0
+Top 10% Customer Share %,All,0.4644
+Repeat Customer %,All,0.8027
+RFM Customers,Segment At Risk,4895.0
+RFM Customers,Segment Champions,24851.0
+RFM Customers,Segment Hibernating,20948.0
+RFM Customers,Segment High-Value At Risk,3863.0
+RFM Customers,Segment Loyal,19718.0
+RFM Customers,Segment New / Recent,9146.0
+RFM Customers,Segment Promising,7998.0
+Profit @ Cap,Cap 5%,39057706573.0
+Profit Uplift,"Cap 5%, attrition 0%",10993718735.0
+Break-even Attrition %,Cap 5%,0.41
+Orders Affected by Cap,Cap 5%,285888.0
+Profit @ Cap,Cap 10%,33112115480.0
+Profit Uplift,"Cap 10%, attrition 0%",5048127642.0
+Break-even Attrition %,Cap 10%,0.379
+Orders Affected by Cap,Cap 10%,190570.0
+Profit @ Cap,Cap 12%,31373850277.0
+Profit Uplift,"Cap 12%, attrition 0%",3309862439.0
+Break-even Attrition %,Cap 12%,0.359
+Orders Affected by Cap,Cap 12%,152579.0
+Profit @ Cap,Cap 15%,29446646394.0
+Profit Uplift,"Cap 15%, attrition 0%",1382658557.0
+Break-even Attrition %,Cap 15%,0.314
+Orders Affected by Cap,Cap 15%,95710.0

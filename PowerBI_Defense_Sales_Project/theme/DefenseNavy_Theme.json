@@ -1,0 +1,48 @@
+{
+  "name": "Defense Navy",
+  "dataColors": ["#F5A623", "#3FA7D6", "#59C3A3", "#E4572E", "#9B8AC4", "#7F8C9B", "#F7D26B", "#2E86AB"],
+  "background": "#0B1B2F",
+  "foreground": "#E8EEF5",
+  "tableAccent": "#F5A623",
+  "good": "#2ECC71",
+  "neutral": "#F5B041",
+  "bad": "#E74C3C",
+  "maximum": "#F5A623",
+  "center": "#3FA7D6",
+  "minimum": "#16314F",
+  "null": "#7F8C9B",
+  "textClasses": {
+    "callout":  { "fontSize": 28, "fontFace": "Segoe UI Semibold", "color": "#FFFFFF" },
+    "title":    { "fontSize": 14, "fontFace": "Segoe UI Semibold", "color": "#E8EEF5" },
+    "header":   { "fontSize": 12, "fontFace": "Segoe UI Semibold", "color": "#E8EEF5" },
+    "label":    { "fontSize": 10, "fontFace": "Segoe UI", "color": "#B7C4D4" }
+  },
+  "visualStyles": {
+    "*": {
+      "*": {
+        "*": [{ "fontFamily": "Segoe UI", "color": { "solid": { "color": "#B7C4D4" } } }],
+        "background": [{ "show": true, "color": { "solid": { "color": "#102A43" } }, "transparency": 0 }],
+        "border": [{ "show": false }],
+        "title": [{ "show": true, "fontColor": { "solid": { "color": "#E8EEF5" } }, "fontSize": 12, "fontFamily": "Segoe UI Semibold" }],
+        "visualHeader": [{ "show": false }]
+      }
+    },
+    "page": {
+      "*": {
+        "background": [{ "color": { "solid": { "color": "#0B1B2F" } }, "transparency": 0 }]
+      }
+    },
+    "card": {
+      "*": {
+        "labels": [{ "color": { "solid": { "color": "#FFFFFF" } }, "fontSize": 26 }],
+        "categoryLabels": [{ "color": { "solid": { "color": "#B7C4D4" } }, "fontSize": 10 }]
+      }
+    },
+    "slicer": {
+      "*": {
+        "background": [{ "show": true, "color": { "solid": { "color": "#102A43" } } }],
+        "items": [{ "fontColor": { "solid": { "color": "#E8EEF5" } } }]
+      }
+    }
+  }
+}

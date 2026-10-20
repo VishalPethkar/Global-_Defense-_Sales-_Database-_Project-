@@ -1,0 +1,4 @@
+*.xlsx
+sales.csv
+__pycache__/
+*.pem

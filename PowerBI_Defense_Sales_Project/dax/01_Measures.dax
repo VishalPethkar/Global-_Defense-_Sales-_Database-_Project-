@@ -1,0 +1,303 @@
+-- ============================================================
+-- 01 | MEASURES   (create an empty table "_Measures" via Enter Data, then add each measure)
+-- Business rule: REALISED = Order_Status "Completed". Net_Profit is 0 for Returned/Cancelled and
+-- only an expectation for Pending, so profit and revenue KPIs are filtered to Completed.
+-- Suggested display-folder names are shown in the section headers.
+-- ============================================================
+
+-------------------------------------------------------------
+-- FOLDER: 1 Core KPIs
+-------------------------------------------------------------
+Orders (All) =
+COUNTROWS(Fact_Sales)                                   -- Order_ID is unique, so COUNTROWS = distinct orders and is faster
+
+Completed Orders =
+CALCULATE([Orders (All)], Fact_Sales[Order_Status] = "Completed")
+
+Active Customers =
+CALCULATE(DISTINCTCOUNT(Fact_Sales[Customer_ID]), Fact_Sales[Order_Status] = "Completed")
+
+Units Sold =
+CALCULATE(SUM(Fact_Sales[Order_Quantity]), Fact_Sales[Order_Status] = "Completed")
+
+Gross Sales =
+CALCULATE(SUM(Fact_Sales[Gross_Sales]), Fact_Sales[Order_Status] = "Completed")
+
+Revenue =
+CALCULATE(SUM(Fact_Sales[Net_Revenue]), Fact_Sales[Order_Status] = "Completed")
+
+Cost =
+CALCULATE(SUM(Fact_Sales[Total_Cost]), Fact_Sales[Order_Status] = "Completed")
+
+Profit =
+CALCULATE(SUM(Fact_Sales[Net_Profit]), Fact_Sales[Order_Status] = "Completed")
+
+Profit Margin % =
+DIVIDE([Profit], [Revenue])
+
+Avg Order Value =
+DIVIDE([Revenue], [Completed Orders])
+
+Profit per Order =
+DIVIDE([Profit], [Completed Orders])
+
+Revenue per Customer =
+DIVIDE([Revenue], [Active Customers])
+
+Data As Of =
+MAX(Fact_Sales[Order_Date])
+
+-------------------------------------------------------------
+-- FOLDER: 2 Discount & Margin
+-------------------------------------------------------------
+Discount Given =
+CALCULATE(SUM(Fact_Sales[Discount_Amount]), Fact_Sales[Order_Status] = "Completed")
+
+Weighted Discount % =
+DIVIDE([Discount Given], [Gross Sales])                 -- value-weighted: the "true" average discount
+
+Avg Discount % (Simple) =
+CALCULATE(AVERAGE(Fact_Sales[Discount_Applied]), Fact_Sales[Order_Status] = "Completed")
+
+Loss-Making Orders =
+CALCULATE([Orders (All)], Fact_Sales[Is_Loss_Making] = 1)
+
+Loss-Making % =
+DIVIDE([Loss-Making Orders], [Completed Orders])
+
+Loss Value =
+CALCULATE(SUM(Fact_Sales[Net_Profit]), Fact_Sales[Is_Loss_Making] = 1)    -- negative number
+
+High-Discount Order Share % =                           -- share of completed orders discounted above 15%
+DIVIDE(
+    CALCULATE([Completed Orders], Fact_Sales[Discount_Applied] > 0.15),
+    [Completed Orders])
+
+Margin Gap vs No-Discount (pp) =                        -- margin given up relative to undiscounted orders
+VAR _base = CALCULATE([Profit Margin %], Fact_Sales[Discount_Applied] = 0, REMOVEFILTERS(Dim_DiscountBand))
+RETURN [Profit Margin %] - _base
+
+-------------------------------------------------------------
+-- FOLDER: 3 Leakage & Pipeline
+-------------------------------------------------------------
+Order Value (All Statuses) =
+SUM(Fact_Sales[Net_Revenue])
+
+Returned Revenue =
+CALCULATE(SUM(Fact_Sales[Net_Revenue]), Fact_Sales[Order_Status] = "Returned")
+
+Cancelled Revenue =
+CALCULATE(SUM(Fact_Sales[Net_Revenue]), Fact_Sales[Order_Status] = "Cancelled")
+
+Pending Revenue =
+CALCULATE(SUM(Fact_Sales[Net_Revenue]), Fact_Sales[Order_Status] = "Pending")
+
+Pending Profit (Expected) =
+CALCULATE(SUM(Fact_Sales[Net_Profit]), Fact_Sales[Order_Status] = "Pending")
+
+Leakage Revenue =
+[Returned Revenue] + [Cancelled Revenue]
+
+Revenue Leakage % =
+DIVIDE([Leakage Revenue], [Order Value (All Statuses)])
+
+Return Rate % =
+DIVIDE(CALCULATE([Orders (All)], Fact_Sales[Order_Status] = "Returned"), [Orders (All)])
+
+Cancel Rate % =
+DIVIDE(CALCULATE([Orders (All)], Fact_Sales[Order_Status] = "Cancelled"), [Orders (All)])
+
+Pending Rate % =
+DIVIDE(CALCULATE([Orders (All)], Fact_Sales[Order_Status] = "Pending"), [Orders (All)])
+
+Est. Profit Forgone to Leakage =                        -- ESTIMATE: leaked revenue x realised margin
+[Leakage Revenue] * [Profit Margin %]
+
+Avg Ship Days =
+AVERAGE(Fact_Sales[Ship_Days])
+
+Shipped Within 3 Days % =
+DIVIDE(CALCULATE([Orders (All)], Fact_Sales[Ship_Days] <= 3), [Orders (All)])
+
+Revenue by Ship Date =                                  -- uses the INACTIVE Ship_Date relationship
+CALCULATE([Revenue], USERELATIONSHIP(Fact_Sales[Ship_Date], Dim_Date[Date]))
+
+-------------------------------------------------------------
+-- FOLDER: 4 Time Intelligence   (YoY is blank for FY2024 because no earlier year exists in the data)
+-------------------------------------------------------------
+Revenue LY =
+CALCULATE([Revenue], SAMEPERIODLASTYEAR(Dim_Date[Date]))
+
+Revenue YoY Δ =
+IF(NOT ISBLANK([Revenue LY]), [Revenue] - [Revenue LY])
+
+Revenue YoY % =
+DIVIDE([Revenue] - [Revenue LY], [Revenue LY])
+
+Profit LY =
+CALCULATE([Profit], SAMEPERIODLASTYEAR(Dim_Date[Date]))
+
+Profit YoY % =
+DIVIDE([Profit] - [Profit LY], [Profit LY])
+
+Margin LY =
+CALCULATE([Profit Margin %], SAMEPERIODLASTYEAR(Dim_Date[Date]))
+
+Margin YoY (pp) =
+IF(NOT ISBLANK([Margin LY]), [Profit Margin %] - [Margin LY])
+
+Revenue FYTD =                                          -- fiscal year-to-date (FY ends 30 Sep); locale-proof version
+CALCULATE(
+    [Revenue],
+    FILTER(
+        ALL(Dim_Date),
+        Dim_Date[Fiscal_Year] = MAX(Dim_Date[Fiscal_Year]) && Dim_Date[Date] <= MAX(Dim_Date[Date])))
+-- Alternative: TOTALYTD([Revenue], Dim_Date[Date], "9/30")  (string format depends on locale)
+
+Revenue FYTD LY =
+CALCULATE([Revenue FYTD], SAMEPERIODLASTYEAR(Dim_Date[Date]))
+
+Revenue PM =
+CALCULATE([Revenue], DATEADD(Dim_Date[Date], -1, MONTH))
+
+Revenue MoM % =
+DIVIDE([Revenue] - [Revenue PM], [Revenue PM])
+
+Revenue 3M Avg =                                        -- average MONTHLY revenue over the trailing 3 months
+VAR _win = DATESINPERIOD(Dim_Date[Date], MAX(Dim_Date[Date]), -3, MONTH)
+RETURN
+    DIVIDE(
+        CALCULATE([Revenue], _win),
+        CALCULATE(DISTINCTCOUNT(Dim_Date[Year_Month]), _win))
+
+Revenue YoY Label =
+VAR _v = [Revenue YoY %]
+RETURN IF(ISBLANK(_v), "n/a - first year of data",
+          IF(_v >= 0, "▲ ", "▼ ") & FORMAT(ABS(_v), "0.0%") & " vs LY")
+
+-------------------------------------------------------------
+-- FOLDER: 5 Ranking & Concentration
+-------------------------------------------------------------
+Product Rank =
+RANKX(ALL(Dim_Product[Product_Name]), [Profit], , DESC, Dense)
+
+Share of Revenue % =                                    -- share within whatever the slicers allow
+DIVIDE([Revenue], CALCULATE([Revenue], ALLSELECTED(Dim_Product)))
+
+Share of Profit % =
+DIVIDE([Profit], CALCULATE([Profit], ALLSELECTED(Dim_Product)))
+
+Cumulative Profit % (Pareto) =                          -- put Product_Name on the axis, sorted by [Profit] DESC
+VAR _p     = [Profit]
+VAR _all   = ADDCOLUMNS(ALLSELECTED(Dim_Product[Product_Name]), "@p", [Profit])
+VAR _total = SUMX(_all, [@p])
+RETURN DIVIDE(SUMX(FILTER(_all, [@p] >= _p), [@p]), _total)
+
+Supplier Share % =
+DIVIDE([Revenue], CALCULATE([Revenue], ALLSELECTED(Dim_Product[Supplier_Short])))
+
+Supplier HHI =                                          -- Herfindahl index of supplier revenue (0-10,000; >2,500 = highly concentrated)
+SUMX(
+    VALUES(Dim_Product[Supplier_Short]),
+    VAR _s = [Supplier Share %]
+    RETURN _s * _s) * 10000
+
+Top 10% Customer Revenue =
+VAR _cust = FILTER(VALUES(Dim_Customer[Customer_ID]), [Revenue] > 0)
+VAR _n    = ROUNDUP(COUNTROWS(_cust) * 0.1, 0)
+RETURN SUMX(TOPN(_n, _cust, [Revenue], DESC), [Revenue])
+
+Top 10% Customer Share % =
+DIVIDE([Top 10% Customer Revenue], [Revenue])
+
+Repeat Customer % =                                     -- static, from Dim_Customer RFM snapshot
+DIVIDE(
+    CALCULATE(DISTINCTCOUNT(Dim_Customer[Customer_ID]), Dim_Customer[Order_Count] >= 2),
+    CALCULATE(DISTINCTCOUNT(Dim_Customer[Customer_ID]), Dim_Customer[Order_Count] >= 1))
+
+-------------------------------------------------------------
+-- FOLDER: 6 Discount What-If   (assumption stated on the page: no demand response unless Attrition > 0)
+-------------------------------------------------------------
+Revenue @ Cap =                                         -- iterates only the ~21 distinct discount values -> very fast
+SUMX(
+    VALUES(Fact_Sales[Discount_Applied]),
+    VAR _d = Fact_Sales[Discount_Applied]
+    RETURN
+        CALCULATE(SUM(Fact_Sales[Gross_Sales]), Fact_Sales[Order_Status] = "Completed")
+            * (1 - MIN(_d, [Discount Cap Value])))
+
+Profit @ Cap =
+[Revenue @ Cap] - [Cost]
+
+Margin @ Cap % =
+DIVIDE([Profit @ Cap], [Revenue @ Cap])
+
+Profit @ Cap (After Attrition) =                        -- orders that were discounted ABOVE the cap are lost at rate [Attrition Value]
+SUMX(
+    VALUES(Fact_Sales[Discount_Applied]),
+    VAR _d     = Fact_Sales[Discount_Applied]
+    VAR _keep  = IF(_d > [Discount Cap Value], 1 - [Attrition Value], 1)
+    VAR _gross = CALCULATE(SUM(Fact_Sales[Gross_Sales]), Fact_Sales[Order_Status] = "Completed")
+    VAR _cost  = CALCULATE(SUM(Fact_Sales[Total_Cost]),  Fact_Sales[Order_Status] = "Completed")
+    RETURN _keep * (_gross * (1 - MIN(_d, [Discount Cap Value])) - _cost))
+
+Profit Uplift =
+[Profit @ Cap (After Attrition)] - [Profit]
+
+Profit Uplift % =
+DIVIDE([Profit Uplift], [Profit])
+
+Orders Affected by Cap =
+VAR _cap = [Discount Cap Value]
+RETURN CALCULATE([Completed Orders], Fact_Sales[Discount_Applied] > _cap)
+
+Break-even Attrition % =                                -- how many affected orders can walk away before the cap destroys value
+VAR _cap = [Discount Cap Value]
+VAR _hi  = FILTER(VALUES(Fact_Sales[Discount_Applied]), Fact_Sales[Discount_Applied] > _cap)
+VAR _was = SUMX(_hi, CALCULATE(SUM(Fact_Sales[Net_Profit]), Fact_Sales[Order_Status] = "Completed"))
+VAR _now = SUMX(_hi,
+              CALCULATE(SUM(Fact_Sales[Gross_Sales]), Fact_Sales[Order_Status] = "Completed") * (1 - _cap)
+            - CALCULATE(SUM(Fact_Sales[Total_Cost]),  Fact_Sales[Order_Status] = "Completed"))
+RETURN IF(_now > 0, 1 - DIVIDE(_was, _now))
+
+-------------------------------------------------------------
+-- FOLDER: 7 Customer Segmentation (RFM)
+-------------------------------------------------------------
+RFM Customers =
+CALCULATE(DISTINCTCOUNT(Dim_Customer[Customer_ID]), Dim_Customer[RFM_Segment] <> "No Completed Orders")
+
+Avg Recency (Days) =
+AVERAGE(Dim_Customer[Recency_Days])
+
+Avg Orders per Customer =
+AVERAGE(Dim_Customer[Order_Count])
+
+At-Risk Revenue Exposure =                              -- lifetime revenue of customers who have gone quiet but were valuable
+CALCULATE(SUM(Dim_Customer[Lifetime_Revenue]),
+          Dim_Customer[RFM_Segment] IN {"High-Value At Risk", "At Risk"})
+
+-------------------------------------------------------------
+-- FOLDER: 8 Formatting & Titles (use in conditional formatting / dynamic titles)
+-------------------------------------------------------------
+Margin Colour =
+SWITCH(TRUE(),
+    [Profit Margin %] >= 0.20, "#2ECC71",
+    [Profit Margin %] >= 0.15, "#F5B041",
+    "#E74C3C")
+
+YoY Colour =
+SWITCH(TRUE(), ISBLANK([Revenue YoY %]), "#7F8C9B", [Revenue YoY %] >= 0, "#2ECC71", "#E74C3C")
+
+Selected Period Title =
+VAR _fy = SELECTEDVALUE(Dim_Date[Fiscal_Year], "All fiscal years")
+RETURN "Revenue & Profit | " & _fy
+
+Discount Page Title =
+"Capping discounts at " & FORMAT([Discount Cap Value], "0%") & " adds "
+    & FORMAT([Profit Uplift] / 1e9, "0.0") & "B profit ("
+    & FORMAT([Profit Uplift %], "0%") & ") if "
+    & FORMAT([Attrition Value], "0%") & " of affected orders are lost"
+
+Assumption Note =
+"Scenario assumes prices fall back to the cap only; no change in cost. Attrition = share of orders "
+    & "above the cap that never come back. Source: realised (Completed) orders."
